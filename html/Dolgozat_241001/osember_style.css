@@ -1,0 +1,11 @@
+body{
+    background-color: moccasin;
+    color: navy;
+}
+
+img{
+    margin: auto;
+    border: 1pt black;
+    display: block;
+}
+

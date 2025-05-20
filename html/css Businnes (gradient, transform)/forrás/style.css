@@ -1,0 +1,38 @@
+.page{
+    width: 1200px;
+    box-shadow: 10px 10px black;
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    background-image: linear-gradient(to left, rgb(2, 0, 36) , rgb(9, 121, 110), 30%, rgb(0, 212, 255));
+}
+
+
+body{
+    background-image: linear-gradient(to right, rgb(2, 0, 36) , rgb(9, 121, 110), 30%, rgb(0, 212, 255));
+}
+
+.menu a{
+    width: 150px;
+    height: 40px;
+    background-color: brown;
+    color: beige;
+    text-align: center;
+    font-weight: bold;
+    margin: 1px;
+    text-decoration: none;
+
+}
+
+.menu{
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.menu a:hover{
+    
+}
+

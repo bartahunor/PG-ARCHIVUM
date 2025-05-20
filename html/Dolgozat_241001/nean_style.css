@@ -1,0 +1,17 @@
+body{
+    background-color: moccasin;
+    color: navy;
+}
+
+hr{
+    width: 400pt;
+    margin: auto;
+}
+
+table{
+    width: 700pt;
+    border: none;
+    margin: auto;
+    display: block;
+}
+

@@ -1,0 +1,168 @@
+.page{
+    width: 1200px;
+    margin-top: 10px;
+    background-color: rgb(221, 134, 35);
+    justify-content: center;
+    align-items: center;
+    display: block;
+    margin: auto;
+}
+
+.keret{
+    height: 240px;
+    width: 380px;
+    margin: 10px;
+    overflow: hidden;
+    display: block;
+    flex-direction: row;
+    float: left;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/*#szine, #fonakja {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition:  opacity 2s linear;
+}*/
+img{
+    height: 240px;
+    width: 380px;
+}
+
+
+#szine{
+    height: 240px;
+    width: 380px;
+    opacity: 1;
+    position: absolute;
+    transition:  opacity 2s linear
+}
+
+
+#fonakja{
+    background-color: rgba(100, 100, 100, 1);
+    height: 240px;
+    width: 380px;
+    position: absolute;
+    opacity: 1;
+    color: white;
+    text-align: center;
+}
+
+
+#szine:hover{
+    opacity: 0;
+}
+
+
+#szineegy{
+    height: 240px;
+    width: 380px;
+    overflow: hidden;
+    position: absolute;
+}
+
+#fonakjaegy{
+    background-color: rgba(100, 100, 100, 0.5);
+    height: 240px;
+    width: 380px;
+    position: absolute;
+    opacity: 0;
+    color: white;
+}
+
+#fonakjaegy:hover{
+    transform: rotateY('180deg');
+    opacity: 0.7;
+}
+
+#szineketto{
+    height: 240px;
+    width: 380px;
+    overflow: hidden;
+    position: absolute;
+}
+
+#fonakjaketto{
+    background-color: rgba(100, 100, 100);
+    height: 1000px;
+    width: 1000px;
+    position: absolute;
+    opacity: 0;
+    color: white;
+    transition: opacity width height overflow 2s linear;
+    overflow: hidden;
+}
+
+
+#fonakjaketto:hover{
+    opacity: 0.5;
+    width: 380px;
+    height: 240px;
+    overflow: hidden;
+}
+
+#grad{
+    background: rgb(254,0,0);
+    background: linear-gradient(-45deg, rgba(254,0,0,1) 0%, rgba(227,151,19,1) 0%, rgba(44,161,36,1) 100%, rgba(0,22,255,1) 100%);
+    height: 240px;
+    width: 380px;
+    overflow: hidden;
+
+}
+
+#piros{
+    overflow: hidden;
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border-left: 190px solid transparent;
+    border-right: 190px solid transparent;
+  
+    border-top: 190px solid red;
+    
+}
+
+#zold{
+    position: absolute;
+    background-color: green;
+    height: 240px;
+    width: 380px;
+    overflow: hidden;
+}
+
+#grad2{
+    background: rgb(0,145,255);
+    background: repeating-radial-gradient(circle, rgba(0,145,255,1) 0%, rgba(17,0,255,1) 100%);
+    height: 240px;
+    width: 380px;
+    overflow: hidden;
+    background-repeat: repeat;
+    background-position: top right; 
+}
+
+#megy{
+    position: absolute;
+    display: block;
+    background-color: green;
+    width: 20px;
+    height: 20px;
+    animation: megy 10s linear infinite;
+}
+
+@keyframes megy{
+    /*0%{background-color: red;}
+    25%{background-color: yellow;}
+    50%{background-color: green;}
+    75%{background-color: blue;}
+    100%{background-color: red;}*/
+
+    0%   {background-color:red; left:300px; top:0px;}
+    25%  {background-color:yellow; left:1600px; top:0px;}
+    50%  {background-color:blue; left:1600px; top: 600px;}
+    75%  {background-color:green; left:300px; top:600px;}
+    100% {background-color:red; left:300px; top:0px;}
+}

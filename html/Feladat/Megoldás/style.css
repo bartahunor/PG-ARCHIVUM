@@ -1,0 +1,113 @@
+#animals{
+    width: 1200px;
+    background-color: bisque;
+    margin: 50px auto 0 auto;
+}
+
+nav{
+    background-color: black;
+    color: white;
+    width: 100%;
+    height: 30px;
+    margin: 0px 0px 10px 0px;
+    padding: 0px 0px 0px 0px;
+    border: 0px;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+nav ul#menu{
+    margin: 0px 0px 0px 0px;
+    padding: 0px;
+    /*height:100%;*/
+    float:left;
+    height:30px;
+    overflow:hidden;
+    list-style-type: none;
+}
+
+nav ul#menu li{
+    margin: 0px;
+    padding: 0px;
+    float:left;
+    height:100%; 
+    background:url(menuhover.gif) center no-repeat;
+    background-size: 0cm;
+    transition: background-size 1s linear;
+}
+
+nav ul#menu li:hover{
+    background-size: 100%;
+    text-decoration:none;
+}
+
+nav ul#menu li a{
+    float:left;
+    font-size:14pt;
+    font-weight: bold;
+    text-decoration: none;
+    height:100%;
+    padding:0 15px;
+    margin: 0px;
+    line-height:30px;
+    color: white;
+}
+
+.animal{
+    width: 380px;
+    height: 250px;
+    padding: 0;
+    margin: 10px;
+    position: relative;
+    float: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    overflow: hidden;
+}
+
+.text{
+    color: white;
+    overflow:hidden;
+    position: absolute;
+    transition: all 0.5s;
+    background-color:rgba(100,100,100,0.7);
+    width:360px;
+    height:400px;
+    padding:10px;
+    margin: 0px;
+    margin-top:160px;
+}
+
+.text:hover{
+    margin-top: 0;
+}
+
+.dog{
+    background-image: url(dog.jpg);
+    
+}
+
+.cat{
+    background-image: url(cat.jpg);
+}
+
+.cow{
+    background-image: url(cow.jpg);
+}
+
+.duck{
+    background-image: url(duck.jpg);
+}
+
+.horse{
+    background-image: url(horse.jpg);
+}
+
+.sheep{
+    background-image: url(sheep.jpg);
+}
+
+.clear{
+    clear: both;
+}

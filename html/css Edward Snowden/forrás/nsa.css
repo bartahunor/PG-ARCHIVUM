@@ -1,0 +1,50 @@
+#container{
+    width: 640px;
+    padding: 10px;
+    padding-right: 10px;
+    padding-top: 16px;
+}
+
+#authors{
+    border-bottom: 1px, solid, #ccc;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+#footer{
+    border-top: 2px, solid, orange;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#intro{
+    padding: 20px;
+}
+
+.kep{
+    width: 620px;
+}
+
+p{
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.kepfelirat{
+    margin-top: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+
+
+body{
+    background-color:  #f1f1f1;
+}
+
+.kep, p{
+    background-color: #f1f1f1;
+}
+

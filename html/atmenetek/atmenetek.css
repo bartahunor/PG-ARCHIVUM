@@ -1,0 +1,30 @@
+#amorf{
+    width: 300px;
+    background-color: yellow;
+    color: red;
+    padding: 30px 0 30px 100px;
+    border-radius: 2em 14em 4em 8em / 3em 12em 6em 10em;
+    transition-property: width, background-color, color, padding, border-radius, margin; /*felsorolom mik fognak változni*/
+    transition-duration: 4s, 10s, 5s, 8s, 8s, 3s; /*egy-egy transition idejének lefolyása*/
+    transition-delay: 5s, 4s, 8s, 10s, 7s, 3s; /*miután az egeret az alak mennyi időre kezdje*/
+    transition-timing-function: cubic-bezier(0.2, 0.6, 0.4, 0.8), linear, ease, cubic-bezier(1.0, 0.0, 0.0, 1.0), linear, ease-in-out;
+    /*transition: width 4s cubic-bezier(0.2, 0.6, 0.4, 0.8) 5s, background-color 10s linear 4s, color 5s ease 8s, padding 8s cubic-bezier(1.0, 0.0, 0.0, 1.0) 10s, border-radius 8s linear 7s, margin 3s ease-in-out 3s; minden egyben*/
+}
+
+#amorf:hover{
+    width: 200px;
+    background-color: red;
+    color: teal;    
+    padding: 10px 50px 40px 60px;
+    border-radius: 3em 12em 8em 12em / 5em 10em 8em 12em;
+    margin: 100px;
+}
+
+#kep img{
+    position: absolute; /*egymásra kerülnek a képek*/
+    transition:  opacity 2s steps(1, end);
+}
+
+#ketto:hover{
+    opacity: 0;
+}
