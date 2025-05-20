@@ -1,0 +1,624 @@
+-------------------------------------------------------------
+09.13.
+Első:
+CREATE TABLE tanulo(
+    id INTEGER PRIMARY KEY,
+    nev VARCHAR(50),
+    nem VARCHAR(50),
+    szuldatum DATE,
+    irsz VARCHAR(4),
+    cim VARCHAR(50),
+    ital VARCHAR(20),
+    pohar TINYINT)
+	
+	
+CREATE TABLE telepulesek(
+    irsz VARCHAR(4) PRIMARY KEY,
+    nev VARCHAR(20))
+	
+INSERT INTO telepulesek VALUES
+	("6100", "Kiskunfélegyháza"),
+    ("3600", "Ózd")
+	
+ALTER TABLE diak
+ADD CONSTRAINT FOREIGN KEY(irsz) REFERENCES telepulesek(irsz)
+
+INSERT INTO diak VALUES(
+    2,
+    "Orsós Othelló",
+    "F",
+    "2000-02-02",
+    "3600",
+    "Arany u. 2.",
+    "a@ä,hu",
+    "36201234567",
+    "VBK",
+    30)
+	
+	
+	
+-------------------------------------------------------------
+10.04.	
+LEKÉRDEZÉSEK:
+
+CREATE DATABASE varosokiid
+DEFAULT CHARACTER SET utf8
+COLLATE utf8_hungarian_ci
+
+-- Jelenítsük meg csak a városok nevét:
+SELECT varos.vnev
+FROM varos 
+
+-- 3000 főnél kevesebb lakosú városok neve, területe:
+SELECT varos.vnev, varos.terulet
+FROM varos
+WHERE varos.nepesseg < 3000
+
+-- Kiskunfélegyházi járáshoz tartozó települések minden adata:
+SELECT *
+FROM varos
+WHERE varos.jaras = "Kiskunfélegyházi"
+
+-- Balatonalmádi járáshoz tartozó települések minden adata:
+SELECT *
+FROM varos
+WHERE varos.jaras = "Balatonalmádi"
+
+-- Az Esztergomi és a Komáromi kistérséghez tartozó városok neve és lakosságszáma:
+SELECT varos.vnev, varos.nepesseg
+FROM varos
+WHERE varos.kisterseg = "Esztergomi" OR varos.kisterseg = "Komáromi"
+
+
+
+-------------------------------------------------------------
+10.11
+LEKÉRDEZÉSEK:
+
+-- A Balaton szóval kezdődő városok neve:
+SELECT varos.vnev
+FROM varos
+WHERE varos.vnev LIKE "Balaton%";
+
+-- Városok amelyek nevében "vár" szerepel:
+SELECT varos.vnev
+FROM varos
+WHERE varos.vnev LIKE "%vár%";
+
+-- Városok amelyek neve 4 betűs:
+SELECT varos.vnev
+FROM varos
+WHERE varos.vnev LIKE "____";
+
+-- Esztergomi kistérséghez tartozó városok neve és lakossága terület szerinti csökkenő sorrendbe
+SELECT varos.vnev, varos.nepesseg
+FROM varos 
+WHERE varos.kisterseg = "Esztergomi" 
+ORDER BY varos.terulet DESC;
+
+-- A városok neve és járás lakosság  szerinti növekvő, azon belül terület szerint csökkenő
+SELECT varos.vnev, varos.jaras
+FROM varos
+ORDER BY varos.nepesseg ASC, varos.terulet DESC
+
+-- A legnagyobb területű város neve és területe:
+SELECT varos.terulet, varos.vnev
+FROM varos
+ORDER BY varos.terulet DESC
+LIMIT 1;
+
+-- Az 5 legkevesebb lakosú város neve és lakosságszám:
+SELECT varos.vnev, varos.nepesseg
+FROM varos
+ORDER BY varos.nepesseg ASC
+LIMIT 5;
+
+-- A városok neve és népsűrűség, utóbbi szerint csökenő sorrendben:
+SELECT varos.vnev, varos.nepesseg / varos.terulet AS nepsuruseg
+FROM varos
+ORDER BY nepsuruseg DESC;
+
+-- Hányan laknak városban MAgyarországon:
+SELECT SUM(varos.nepesseg) as osszlakossag
+FROM varos
+
+-- Hány város van Magyarországon
+SELECT COUNT(*) AS "városok száma"
+FROM varos
+
+
+
+-------------------------------------------------------------
+11.08
+LEKÉRDEZÉSEK:
+
+-- Hány város található az egyes járásokban?
+SELECT COUNT(*), varos.jaras
+FROM varos
+GROUP BY varos.jaras;
+
+-- Az átlagos lakosságszám kistérségenként, növekvő sorrnedbe
+SELECT varos.kisterseg, AVG(varos.nepesseg) AS atlag
+FROM varos
+GROUP BY varos.kisterseg
+ORDER BY atlag ASC;
+
+-- Melyik járások összlakossága 15000 feletti?
+SELECT varos.jaras, SUM(varos.nepesseg) AS osszlakossag
+FROM varos
+GROUP BY varos.jaras
+HAVING osszlakossag > 15000;
+
+
+TÖBB TÁBLÁBÓL LEKÉRDEZÉS:
+
+-- Melyik megyében hány város van?
+SELECT megye.mnev, COUNT(*)
+FROM megye INNER JOIN varos ON megye.id = varos.megyeid
+GROUP BY megye.mnev;
+
+-- Melyik megyében van a legtőbb városlakó, Budapestet nem számítva?
+SELECT megye.mnev, SUM(varos.nepesseg) AS lakosok
+FROM megye INNER JOIN varos ON megye.id = varos.megyeid
+WHERE megye.mnev <> "Budapest"
+GROUP BY megye.mnev
+ORDER BY lakosok DESC
+LIMIT 1;
+
+-- Csongrád megyében melyek a megyei jogú városok?
+SELECT varos.vnev
+FROM megye INNER JOIN varos ON megye.id = varos.megyeid INNER JOIN varostipus ON varostipus.id = varos.vtipid
+WHERE megye.mnev = "Csongrád" AND varostipus.vtip LIKE "%megyei jogú város%";
+
+
+
+
+
+-------------------------------------------------------------
+11.22
+LEKÉRDEZÉS
+
+-- Lekérdezés segítségével írassa ki a ragadványnévvel rendelkező királyok nevét és ragadványnevét a születési évük sorrendjében!
+SELECT uralkodo.nev, uralkodo.ragnev
+FROM uralkodo
+WHERE uralkodo.ragnev IS NOT NULL
+ORDER BY uralkodo.szul ASC;
+
+-- Készítsen lekérdezést, amely felsorolja az Árpád-ház tagjainak nevét, uralkodásuk kezdő és befejező évét az uralkodásuk sorrendjében! Ha valaki többször uralkodott, akkor a listában többször jelenjen meg!
+SELECT uralkodo.nev, hivatal.mettol, hivatal.meddig
+FROM hivatal INNER JOIN uralkodo ON hivatal.uralkodo_az = uralkodo.azon INNER JOIN uralkodohaz ON uralkodo.uhaz_az = uralkodohaz.azon
+WHERE uralkodohaz.nev = "Árpád-ház"
+ORDER BY hivatal.mettol ASC;
+
+-- Lekérdezés segítségével sorolja fel azoknak a királyoknak a nevét, akik már a koronázásuk éve előtt elfoglalták a hivatalukat!
+SELECT uralkodo.nev
+FROM hivatal INNER JOIN uralkodo ON hivatal.uralkodo_az = uralkodo.azon
+WHERE hivatal.mettol < hivatal.koronazas;
+
+-- Lekérdezés segítségével határozza meg, hogy hány király volt Magyarországon 1601-től 1700-ig! Vegye figyelembe, hogy a királyok uralkodásának csak egy része is eshetett a megjelölt időszakba! Kihasználhatja, hogy ebben az időszakban minden király csak egyszer uralkodott.
+SELECT COUNT(*) AS uralkodok
+FROM hivatal
+WHERE (hivatal.mettol < 1601 AND hivatal.meddig > 1601) OR (hivatal.mettol >= 1601 AND hivatal.meddig <=1700) OR (hivatal.mettol < 1700 AND hivatal.meddig > 1700);
+
+-- Készítsen lekérdezést, amely meghatározza, hogy ki uralkodott a leghosszabb ideig egyfolytában és hány évet? Az uralkodás hosszának számítása például: I. István 1000-től 1038-ig uralkodott, tehát 39 évig volt magyar király.
+SELECT uralkodo.nev, hivatal.meddig - hivatal.mettol + 1 AS evek
+FROM uralkodo INNER JOIN hivatal ON uralkodo.azon = hivatal.uralkodo_az
+ORDER BY evek DESC
+LIMIT 1;
+
+-- Lekérdezés segítségével adja meg azon királyok nevét, akik 15 évesnél fiatalabban kezdtek uralkodni, és hogy ekkor hány évesek voltak! Az adatokat az életkor szerint növekvő sorrendben jelenítse meg!
+SELECT uralkodo.nev, hivatal.mettol - uralkodo.szul AS kor
+FROM uralkodo INNER JOIN hivatal ON uralkodo.azon = hivatal.uralkodo_az
+WHERE hivatal.mettol - uralkodo.szul < 15
+ORDER BY kor ASC;
+
+-- A történelmi események során előfordult, hogy az uralkodó a királyi hivatalt többször foglalta el. Készítsen lekérdezést, amely meghatározza azoknak a királyoknak a nevét és uralkodásuk összes idejét, akik többször foglalták el a hivatalt!
+SELECT uralkodo.nev, SUM(hivatal.meddig - hivatal.mettol + 1)
+FROM uralkodo INNER JOIN hivatal ON uralkodo.azon = hivatal.uralkodo_az
+GROUP BY uralkodo.nev
+HAVING COUNT(*) > 1;
+
+-- Készítsen lekérdezést, amely meghatározza, hogy melyik királyi ház hány uralkodót adott Magyarországnak! A lista a személyek száma szerint csökkenő sorrendű legyen! Ügyeljen, hogy a többször uralkodókat csak egyszer vegye figyelembe a számlálásnál!
+SELECT uralkodohaz.nev, COUNT(*) AS uralkodok
+FROM uralkodohaz INNER JOIN uralkodo ON uralkodohaz.azon = uralkodo.uhaz_az
+GROUP BY uralkodohaz.nev
+ORDER BY uralkodok DESC;
+
+
+
+
+
+-------------------------------------------------------------
+11.29.
+Kultúr történet feladat lekérdezések
+
+-- Lekérdezés segítségével írassa ki azon csapatok nevét, amelyek neve a # karakterrel kezdődik!
+SELECT csapat.nev
+FROM csapat
+WHERE csapat.nev LIKE "#%";
+
+-- A feladatsor táblát használva, lekérdezés segítségével jelenítse meg a feladatsor névadójának nevét, ha abban pontosan egy szóköz van!
+SELECT feladatsor.nevado
+FROM feladatsor
+WHERE feladatsor.nevado LIKE "% %" AND feladatsor.nevado NOT LIKE "% % %"; 
+
+-- Készítsen lekérdezést, amely megadja, hogy ki a névadója a 2018. szilveszterkor aktív feladatsornak!
+SELECT feladatsor.nevado
+FROM feladatsor
+WHERE feladatsor.kituzes <= "2018-12-31" AND feladatsor.hatarido >= "2018-12-31";
+
+-- Készítsen lekérdezést, amely meghatározza a végeredményt! A csapatok neve és az általuk elért összpontszám jelenjen meg, utóbbi szerint csökkenő sorrendben!
+SELECT csapat.nev, COUNT(megoldas.pontszam)
+FROM csapat INNER JOIN megoldas ON csapat.id = megoldas.csapatid
+GROUP BY csapat.nev
+ORDER BY megoldas.pontszam DESC;
+
+-- Készítsen lekérdezést, amely meghatározza a végeredményt! A csapatok neve és az általuk elért összpontszám jelenjen meg, utóbbi szerint csökkenő sorrendben!
+SELECT csapat.nev, SUM(megoldas.pontszam) AS osszpont
+FROM csapat INNER JOIN megoldas ON csapat.id = megoldas.csapatid
+GROUP BY csapat.nev
+ORDER BY SUM(megoldas.pontszam) DESC;
+
+-- Eredetileg úgy tervezték, hogy minden feladatsor 150 pontos lesz. Néhány esetben a kitűzés után kellett módosítani a feladatsoron, így ez nem valósult meg. Adja meg lekérdezéssel azokat a feladatsorokat, amelyek nem 150 pontosak! A feladatsor névadóját, a művészeti ágat és a pontszámot jelenítse meg!
+SELECT feladatsor.nevado, feladatsor.ag, SUM(feladat.pontszam) as osszpont
+FROM feladatsor INNER JOIN feladat ON feladatsor.id = feladat.feladatsorid
+GROUP BY feladatsor.nevado
+HAVING SUM(feladat.pontszam) NOT LIKE 150;
+
+-- Lekérdezés segítségével listázza ki azon csapatok nevét, amelyeknek volt maximális pontszámot érő feladata! Minden csapat neve egyszer jelenjen meg!
+SELECT DISTINCT csapat.nev
+FROM feladat INNER JOIN megoldas ON feladat.id = megoldas.feladatid INNER JOIN csapat On megoldas.csapatid = csapat.id
+WHERE megoldas.pontszam = feladat.pontszam;
+
+-- Bár a versenyzők lelkesek voltak és törekedtek minden feladatot megoldani, ennek ellenére előfordult, hogy nem minden feladatra adtak be megoldást. Készítsen lekérdezést, amely megadja, hogy a „#win” csapat mely feladatsorokból hány feladatot nem adott be! Jelenítse meg a feladatsor névadóját és a be nem adott feladatok számát!
+SELECT feladatsor.nevado, COUNT(megoldas.feladatid)
+FROM feladatsor INNER JOIN feladat ON feladatsor.id = feladat.feladatsorid INNER JOIN megoldas ON feladat.id = megoldas.feladatid INNER JOIN csapat On megoldas.csapatid = csapat.id
+WHERE megoldas.pontszam = 0 and csapat.nev = "#win"
+GROUP BY feladatsor.nevado;
+
+-- Bár a versenyzők lelkesek voltak és törekedtek minden feladatot megoldani, ennek ellenére előfordult, hogy nem minden feladatra adtak be megoldást. Készítsen lekérdezést, amely megadja, hogy a „#win” csapat mely feladatsorokból hány feladatot nem adott be! Jelenítse meg a feladatsor névadóját és a be nem adott feladatok számát!
+SELECT feladatsor.nevado, COUNT(*)
+FROM feladatsor INNER JOIN feladat ON feladatsor.id = feladat.feladatsorid
+WHERE  feladat.id NOT IN (
+    SELECT megoldas.feladatid
+	FROM megoldas  INNER JOIN csapat On megoldas.csapatid = csapat.id
+	WHERE  csapat.nev = "#win")
+GROUP BY feladatsor.nevado;
+
+-- Készítsen lekérdezést, amely megadja, hogy az „irodalom” művészeti ághoz tartozó feladatsorok közül melyeket kellett ugyanabban a hónapban beadni, mint amikor kitűzték? Adja meg a feladatsorok névadóját!
+SELECT feladatsor.nevado
+FROM feladatsor
+WHERE feladatsor.ag = "irodalom" AND MONTH(feladatsor.kituzes) = MONTH(feladatsor.hatarido) AND YEAR(feladatsor.kituzes) = YEAR(feladatsor.hatarido);
+
+-- Lekérdezés segítségével adja meg, melyik feladatsor megoldására volt a legkevesebb idő!
+A feladatsor névadóját jelenítse meg! Ha több ilyen feladatsor van, elegendő az egyiket
+megadnia.
+SELECT feladatsor.nevado, DATEDIFF(feladatsor.hatarido, feladatsor.kituzes) As napok
+FROM feladatsor
+ORDER BY napok ASC
+LIMIT 1;
+
+-- Lekérdezés segítségével adja meg, melyik feladatsor megoldására volt a legkevesebb idő! A feladatsor névadóját jelenítse meg! Ha több ilyen feladatsor van, elegendő az egyiket megadnia.
+SELECT feladatsor.nevado
+FROM feladatsor
+ORDER BY DATEDIFF(feladatsor.hatarido, feladatsor.kituzes) ASC
+LIMIT 1;
+
+-- Készítsen lekérdezést, amely megadja, hogy mely feladatoksorokat tűzték ki az előző beadási határidejét követő napon! A feladatsor névadóját és a kitűzés idejét jelenítse meg! A feladat megoldása során kihasználhatja, hogy egyszerre csak egy feladatsor volt aktív.
+SELECT  kovetkezo.nevado, kovetkezo.kituzes
+FROM feladatsor AS elozo, feladatsor AS kovetkezo
+WHERE DATEDIFF(kovetkezo.kituzes, elozo.hatarido) = 1;
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+01.10.
+-- Készítsen lekérdezést, amely megadja, azoknak a filmeknek a magyar nyelvű és az eredeti címét, melyekhez a magyar szöveget „Heltai Olga” készítette!
+SELECT film.cim, film.eredeti
+FROM film
+WHERE film.magyarszoveg = "Heltai Olga";
+
+-- Lekérdezés segítségével adja meg, azokat a filmrendezőket és szinkronrendezőket, akik valamely 2000 után bemutatott filmet, illetve szinkronját rendezték! A lekérdezés minden névpárt egyszer jelenítsen meg!
+SELECT DISTINCT film.rendezo, film.szinkronrendezo
+FROM film
+WHERE film.ev > 2000;
+
+-- Készítsen lekérdezést, amely megadja azokat a magyar szövegírókat, akik „Christopher Nolan” rendező valamely filmjének magyar szövegét írták egy a „Mafilm Audio Kft.” stúdióban készült szinkronhoz! A lekérdezés az írót és a film magyar nyelvű címét jelenítse meg, az írók neve szerint ábécérendben!
+SELECT film.magyarszoveg, film.cim
+FROM film
+WHERE film.rendezo = "Christopher Nolan" AND film.studio = "Mafilm Audio Kft."
+ORDER BY film.magyarszoveg ASC;
+
+-- Lekérdezés segítségével adja meg, hogy mely filmekben, milyen szerepekhez és mely színészeknek kölcsönözte a hangját „Anger Zsolt”! A film magyar és eredeti címét, valamint a szinkronizált színész és a játszott karakter nevét jelenítse meg!
+SELECT film.cim, film.eredeti, szinkron.szerep, szinkron.szinesz
+FROM film INNER JOIN szinkron ON film.filmaz = szinkron.filmaz
+WHERE szinkron.hang = "ANGER ZSOLT";
+
+-- Lekérdezés segítségével adja meg, hogy melyik filmben hány szereplő szinkronhangját tartalmazza az adatbázis! Jelenítse meg a filmek eredeti és magyar címét, valamint a szinkronszerepek számát!
+SELECT film.eredeti, film.cim, COUNT(*)
+FROM film INNER JOIN szinkron ON film.filmaz = szinkron.filmaz
+GROUP BY film.filmaz;
+
+-- Lekérdezés segítségével adja meg, hogy mely szerepek megnevezésében fordul elő a „rab” szórészlet valamelyik szó elején! A szerepek megnevezése több szóból állhat, például „Roy, rabszolgaszállító”. A lekérdezés a szerepet, a szerepet alakító színész és a hangot kölcsönző szinkronszínész nevét adja meg!
+SELECT szinkron.szerep, szinkron.szinesz, szinkron.hang
+FROM szinkron
+WHERE szinkron.szerep LIKE "% rab%" OR szinkron.szerep LIKE "rab%";
+
+-- Lekérdezés segítségével adja meg azokat a személyeket, akik filmrendezőként és színészként is szerepelnek az adatbázisban (nem feltétlenül ugyanabban a filmben)! A lekérdezés egyszer tartalmazza az ilyen személyek nevét! A lekérdezésben megjelenő mező neve legyen „Színész-rendező”!
+SELECT DISTINCT szinkron.szinesz AS "Színész-rendező"
+FROM szinkron
+WHERE szinkron.szinesz IN (
+	SELECT film.rendezo
+	FROM film); 
+	
+-- Készítsen lekérdezést, amely megadja azoknak a szinkronszínészeknek a nevét, akik valamely film szinkronizálásában együtt dolgoztak „Pap Kati” szinkronszínésszel! A lekérdezés a hangjukat adó színészek nevét és a film magyar címét jelenítse meg! A lekérdezés legyen a film magyar címe, azon belül a megjelenő szinkronszínészek neve szerint ábécérendben, és ne tartalmazza „Pap Kati” nevét!
+SELECT szinkron.hang, film.cim
+FROM film INNER JOIN szinkron ON film.filmaz = szinkron.filmaz
+WHERE szinkron.filmaz IN (
+	SELECT szinkron.filmaz
+	FROM szinkron
+	WHERE szinkron.hang = "Pap Kati")
+AND szinkron.hang <> "Pap Kati" 
+ORDER BY film.cim, szinkron.hang;
+
+-- Lekérdezés segítségével adja meg azokat a filmszínészeket és szinkronszínészeket, akik legalább három filmben úgy szerepelnek, hogy a filmszínész magyar hangja az adott szinkronszínész! A lekérdezés jelenítse meg a filmszínészek és a szinkronszínészek nevét, valamint a filmek számát. A lista legyen ez utóbbi szerint csökkenő sorrendben!
+SELECT szinkron.szinesz, szinkron.hang, COUNT(*)
+FROM szinkron
+GROUP BY szinkron.szinesz, szinkron.hang
+HAVING COUNT(*) >= 3;
+
+-- A legtöbb szinkront a „Mafilm Audio Kft.” stúdió készítette, és a szinkronszínészek többsége is nekik dolgozott. Adja meg azoknak a szinkronszínészeknek a nevét, akik két, ugyanabban az évben bemutatott filmen dolgoztak: a „Mafilm Audio Kft.” mellett egy másik stúdió által szinkronizált filmen is! Listázza ki az évet és a szinkronszínész nevét! A listában ne legyen két azonos sor, és a listát rendezze a szinkronszínész neve szerint ábécérendbe!
+SELECT DISTINCT f1.ev, sz1.hang
+FROM szinkron AS sz1, film AS f1, szinkron AS sz2, fim AS f2
+WHERE sz1.filmaz = f1.filmaz AND sz2.filmaz = f2.filmaz
+AND sz1.hang = sz2.hang
+AND f1.ev = f2.ev
+AND f1.studio = "Mafilm Audio Kft."
+AND f2.studio <> "Mafilm Audio Kft."
+ORDER BY sz1.hang ASC;
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+02.14.
+SELECT COUNT(*) AS "nagyrendezvények száma"
+FROM rendezveny
+WHERE rendezveny.letszam >= 100;
+
+SELECT rendezveny.idopont, rendezveny.napokszama, rendezveny.letszam, helyszin.nev
+FROM rendezveny INNER JOIN helyszin On rendezveny.helyszinId = helyszin.id
+WHERE helyszin.nev = "Szeged";
+
+UPDATE kapcsolat SET kapcsolat.cegnev = "Bugfix IT"
+WHERE kapcsolat.nev = "Nagy Béla
+
+SELECT tipus.nev AS "típus", AVG(rendezveny.letszam) AS "átlaglétszám"
+FROM tipus INNER JOIN rendezveny ON tipus.id = rendezveny.tipusId
+GROUP BY tipus.id
+ORDER BY átlaglétszám DESC
+LIMIT 2;
+
+SELECT helyszin.nev
+FROM helyszin
+WHERE helyszin.id NOT IN (
+    SELECT rendezveny.helyszinId
+    FROM rendezveny);
+	
+SELECT kapcsolat.nev, kapcsolat.email, rendezveny.napokszama * 20000 + rendezveny.letszam * 1000 AS "szervezési díj"
+FROM kapcsolat INNER JOIN rendezveny On kapcsolat.id = rendezveny.kapcsolatId INNER JOIN tipus ON rendezveny.tipusId = tipus.id
+WHERE tipus.nev = "tréning";
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+02.28.
+-- Lekérdezés segítségével írassa ki, hogy „Harczi Zsolt” mely években és milyen versenyszámban szerzett bajnoki címet!
+SELECT bajnok.ev, versenyszam.nev
+FROM versenyszam INNER JOIN bajnok ON versenyszam.id = bajnok.vsz_id INNER JOIN jatekos ON bajnok.jatekos_id = jatekos.id
+WHERE jatekos.nev = "Harczi Zsolt";
+
+-- Készítsen lekérdezést, amely meghatározza, hogy melyik évben adták ki a „vegyes páros” bajnoki címet először!
+SELECT bajnok.ev
+FROM bajnok INNER JOIN versenyszam ON bajnok.vsz_id = versenyszam.id
+WHERE versenyszam.nev = "vegyes páros"
+ORDER BY bajnok.ev ASC
+LIMIT 1;
+
+-- Lekérdezés segítségével adja meg, hogy hány férfi és hány női játékos van az adatbázisban! A létszám értékei mellett a nemek felirata is jelenjen meg! Segítségképpen az elágazás függvény használata SQL-ben: IF(feltétel, érték1, érték2) eredménye, ha a feltétel igaz, akkor érték1, különben érték2.
+SELECT IF(jatekos.neme = 0, "nő", "férfi"), COUNT(*)
+FROM jatekos
+GROUP BY jatekos.neme
+
+-- Lekérdezés segítségével határozza meg, hogy a 2000-es év után a magyar egyesületeken kívül mely országok klubjainak játékosai nyertek bajnoki címet Magyarországon! Minden ország neve egyszer szerepeljen a listában!
+SELECT DISTINCT egyesulet.orszag
+FROM egyesulet INNER JOIN bajnok ON egyesulet.id = bajnok.egyesulet_id
+WHERE bajnok.ev > 2000 AND egyesulet.orszag <> "Magyarország";
+
+-- Készítsen lekérdezést, amely felsorolja az „MTK” egyesület bajnok játékosainak nevét! A listában először a nők, majd a férfiak jelenjenek meg, azon belül a nevek ábécérendben ismétlődés nélkül!
+SELECT jatekos.nev
+FROM egyesulet INNER JOIN bajnok ON egyesulet.id = bajnok.egyesulet_id INNER JOIN jatekos ON bajnok.jatekos_id = jatekos.id
+WHERE egyesulet.nev LIKE "MTK"
+GROUP BY jatekos.neme, jatekos.nev
+ORDER BY jatekos.neme, jatekos.nev ASC;
+
+-- Lekérdezés segítségével listázza ki azokat a játékosokat, akik csak egyszer és egyetlen bajnoki címet nyertek! A listában a nevük, a bajnoki cím éve és versenyszámuk neve jelenjen meg!
+SELECT jatekos.nev, bajnok.ev, versenyszam.nev
+FROM versenyszam INNER JOIN bajnok ON versenyszam.id = bajnok.egyesulet_id INNER JOIN jatekos ON bajnok.jatekos_id = jatekos.id
+GROUP BY bajnok.jatekos_id, jatekos.nev, bajnok.ev, versenyszam.nev
+HAVING COUNT(*) = 1;
+
+-- Lekérdezés segítségével listázza ki azoknak a versenyzőknek a nevét, akiknek az első és utolsó bajnoki címe között legalább 10 év telt el! A listában a nevek és az eltelt évek száma jelenjen meg, az utóbbiak szerint csökkenő sorrendben!
+SELECT MAX(bajnok.ev) - MIN(bajnok.ev) AS eltelt, jatekos.nev
+FROM bajnok INNER JOIN jatekos ON bajnok.jatekos_id = jatekos.id
+GROUP BY jatekos.nev
+HAVING eltelt >= 10
+ORDER BY eltelt DESC;
+
+-- „Pergel Szandra” több vegyes páros bajnoki címet nyert. Készítsen lekérdezést, amely felsorolja, hogy kik voltak a párjai! A listában minden név egyszer jelenjen meg!
+SELECT DISTINCT jatekos.nev
+FROM jatekos INNER JOIN bajnok ON jatekos.id = bajnok.jatekos_id INNER JOIN versenyszam ON bajnok.vsz_id = versenyszam.id
+WHERE bajnok.ev IN(
+    SELECT bajnok.ev
+    FROM jatekos INNER JOIN bajnok ON jatekos.id = bajnok.jatekos_id INNER JOIN 		versenyszam ON bajnok.vsz_id = versenyszam.id
+	WHERE jatekos.nev = "Pergel Szandra" AND versenyszam.nev = "vegyes páros")
+AND versenyszam.nev = "vegyes páros" AND jatekos.neme = 1;
+
+
+
+
+
+
+
+-------------------------------------------------------------
+03.07.
+-- Készítsen lekérdezést, amely megadja a „Vas” megyei tanulók számát!
+SELECT megye.letszam
+FROM megye 
+WHERE megye.nev LIKE "Vas";
+
+-- Készítsen lekérdezést, amely megadja, hogy „Somogy” megyében hány tanuló vett részt a felmérésben!
+SELECT SUM(aerob.letszam)
+FROM megye INNER JOIN aerob ON megye.kod = aerob.mkod
+WHERE megye.nev = "Somogy";
+
+-- Készítsen lekérdezést, amely megadja, hogy összesen hány fiú tanuló kapott egészséges besorolást „Zala” megyéből!
+SELECT SUM(aerob.letszam)
+FROM megye INNER JOIN aerob ON megye.kod = aerob.mkod INNER JOIN allapot ON aerob.allkod = allapot.kod
+WHERE megye.nev LIKE "Zala" AND aerob.nem = 1 AND allapot.nev LIKE "egészséges";
+
+-- Lekérdezés segítségével adja meg, hogy hány megyében van kevesebb tanuló, mint „Heves” megyében!
+SELECT COUNT(megye.nev)
+FROM megye
+WHERE megye.letszam < (SELECT megye.letszam
+                       FROM megye
+                       WHERE megye.nev LIKE "Heves");
+
+?-- Lekérdezés segítségével adja meg, hogy „Pest” megyében a tanulók hányadrésze vett részt a felmérésben!
+SELECT aerob.letszam / megye.letszam
+FROM megye INNER JOIN aerob ON megye.kod = aerob.mkod
+GROUP BY megye.nev
+HAVING megye.nev LIKE "Pest";
+
+?-- Adja meg lekérdezés segítségével, hogy melyik megyében hány „egészséges” besorolást kapott lány tanuló van! A lekérdezés a megye nevét és az egészséges tanulók számát adja meg ez utóbbi szerint csökkenő sorrendben!
+SELECT megye.nev, aerob.letszam
+FROM megye INNER JOIN aerob ON megye.kod = aerob.mkod INNER JOIN allapot ON aerob.allkod = allapot.kod
+WHERE allapot.nev LIKE "egészséges"
+GROUP BY megye.nev;
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+03.14.
+-- Készítsen lekérdezést, amely az elismerés évének sorrendjében jeleníti meg az Oscar-díjas filmeket! Az elnyerés éve és a film eredeti címe jelenjen meg!
+SELECT film.cim
+FROM film
+WHERE film.nyert = 1
+ORDER BY film.ev ASC;
+
+-- Készítsen lekérdezést, amely megadja, hogy mely években jelöltek legalább 10 filmet a díjra! Csak a jelölés évét jelenítse meg!
+SELECT film.ev
+FROM film
+GROUP BY film.ev
+HAVING COUNT(*) >= 10;
+
+-- Készítsen lekérdezést, amely megadja azon filmek eredeti címét, amelyeket a második világháború éveiben (1939 és 1945 között, a határokat is beleértve) jelöltek és ebben az időszakban be is mutattak hazánkban!
+SELECT film.cim
+FROM film
+WHERE film.ev >= 1939 AND film.ev <= 1945 AND YEAR(film.bemutato) >= 1939 AND YEAR(film.bemutato) <= 1945;
+
+-- Készítsen lekérdezést, amely megadja, hogy mely nyertes filmek esetén volt a magyarországi bemutató legalább 10 évvel később, mint a díjazás! Csak a film eredeti címét jelenítse meg!
+SELECT film.cim	
+FROM film
+WHERE film.nyert = 1 AND (YEAR(film.bemutato) - film.ev) >= 10;
+
+-- Vannak olyan producerek, akiknek több filmjét is jelölték díjra, e feladatban őket keressük. Készítsen lekérdezést, amely megadja, hogy hány év telt el a legelső és a legutolsó jelölés között! Jelenítse meg a producer nevét, a jelölések számát és az első és utolsó jelölés között eltelt időt!
+SELECT keszito.nev, MAX(film.ev) - MIN(film.ev) AS eltelt,  COUNT(*)
+FROM film INNER JOIN kapcsolat ON film.id = kapcsolat.filmid INNER JOIN keszito ON kapcsolat.keszitoid = keszito.id
+WHERE keszito.producer = 1
+GROUP BY keszito.nev
+HAVING COUNT(*) > 1;
+
+-- Nem ritka, hogy egy-egy filmnek több, akár három-négy producere is van. Készítsen lekérdezést, amely megadja, hogy a jelölést kapott, azaz az adatbázisban tárolt filmekben kik voltak „Clint Eastwood” producertársai! Az érintett személyek nevét jelenítse meg, és biztosítsa, hogy mindenki csak egyszer szerepeljen!
+SELECT DISTINCT keszito.nev
+FROM kapcsolat INNER JOIN keszito ON kapcsolat.keszitoid = keszito.id
+WHERE kapcsolat.filmid IN (
+    SELECT kapcsolat.filmid
+	FROM kapcsolat INNER JOIN keszito ON kapcsolat.keszitoid = keszito.id
+	WHERE keszito.nev LIKE "Clint Eastwood")
+AND keszito.nev NOT LIKE "Clint Eastwood";
+
+-- Készítsen lekérdezést, amely megadja, hogy kik azok a producerek, akiknek egyetlen Oscar-díjra jelölt filmje esetén sem ismert a magyarországi bemutató dátuma!
+SELECT keszito.nev
+FROM keszito
+WHERE keszito.id NOT IN (
+    SELECT keszito.id
+	FROM film INNER JOIN kapcsolat ON film.id = kapcsolat.filmid INNER JOIN 		keszito ON kapcsolat.keszitoid = keszito.id
+	WHERE film.bemutato >= "1900-01-01");
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------
+03.21.
+NINCS INNER JOIN MERT A TÁBLÁK NINCSENEK ÖSSZEKAPCSOLVA
+-- Készítsen lekérdezést, amely időrendben listázza azon dalok eredeti címét, amelyet a rendező ország nevezett be! Jelenítse meg az évet, a nevező országot és a dal eredeti címét!
+SELECT dal.eredeti
+FROM dal, verseny
+WHERE dal.orszag = verseny.orszag AND dal.ev = verseny.ev
+ORDER BY dal.ev ASC;
+
+-- A döntő előtt sorsolással állapítják meg a bemutatás sorrendjét. Egyes előadók nagy jelentőséget tulajdonítanak ennek, mert az eddigiekben voltak sorszámok, amelyekkel gyakran nyertek, másokkal pedig soha. Készítsen lekérdezést, amely megadja azokat a bemutatási sorszámokat, amelyekkel legalább ötször nyertek a verseny történetében!
+SELECT dal.sorrend
+FROM dal
+WHERE dal.helyezes = 1
+GROUP BY dal.sorrend
+HAVING COUNT(*) >= 5;
+
+-- A Benelux (Belgium, Hollandia, Luxemburg) államok mindegyike szerepelt már 1957-ben is, azonban voltak olyan évek, amikor egyikük sem nevezett. Készítsen lekérdezést, amely megadja, hogy mely években indult mindhárom ország!
+SELECT dal.ev
+FROM dal
+WHERE dal.orszag LIKE "Hollandia" OR dal.orszag LIKE "Belgium" OR dal.orszag LIKE "Luxemburg"
+GROUP BY dal.ev
+HAVING COUNT(*) = 3;
+
+-- Aránylag hamar kialakult az az íratlan szabály, hogy a nyertes dalt nevező országban rendezik a következő évi versenyt. Készítsen lekérdezést, amely megadja, hogy mely győztes ország nem volt rendező a győzelmét követő évben! Jelenítse meg az ország nevét és a győzelem évét!
+SELECT dal.orszag, dal.ev
+FROM dal, verseny
+WHERE dal.helyezes = 1 AND verseny.ev = dal.ev + 1 AND dal.orszag <> verseny.orszag;
+
+?-- Az indulók angolul vagy a nevező ország hivatalos nyelvén énekelhetnek. Készítsen lekérdezéssel listát azon egynyelvű dalokról, amelyeknél ezt a szabályt nem tartották be! A listában a nevező ország, a dal nyelve és a dal eredeti címe jelenjen meg!
+SELECT dal.orszag, dal.nyelv, dal.eredeti
+FROM dal
+WHERE dal.nyelv NOT LIKE "%;%" AND dal.nyelv <> "angol" AND dal.id NOT IN (
+    SELECT dal.id
+    FROM dal, nyelv
+    WHERE dal.orszag = nyelv.orszag AND dal.nyelv = nyelv.nyelv
+    ORDER BY dal.ev DESC);
