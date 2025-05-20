@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Űrlap</title>
+</head>
+<body>
+    <form action="" method="">
+        <label>Név: <input type="text" name="" id="" placeholder="Béla" size="10" maxlength="15" autofocus></label>
+        <!-- type lehet: tel, email, url, search-->
+        <br>
+        <br>
+        <label>Jelszó: <input type="password" name=""></label>
+
+        <fieldset >
+        <legend>Milyen nyelven beszél?</legend>
+            <label><input type="checkbox" name="magyar" id="" value="magyar" checked>magyar</label>
+            <label><input type="checkbox" name="angol" id="" value="angol">angol</label>
+            <label><input type="checkbox" name="nemet" id="" value="nemet">német</label>
+            <label><input type="checkbox" name="spanyol" id="" value="spanyol">spanyol</label>
+        </fieldset>
+
+        <p>Elutazna-e a Marsra?<br>
+            <label><input type="radio" name="utazas" value="igen">igen</label>
+            <label><input type="radio" name="utazas" value="nem">nem</label>
+            <label><input type="radio" name="utazas" value="talán">talán</label>
+        </p>
+        <label>Indulás dátuma: <input type="date" name="datum" min="2024.01.01" max="2030.01.01"></label>
+        <br>
+        <label>Melyik hónapban utazol: <input type="month" name="honap"></label>
+        <br>
+        <label>Melyik héten vizsgázol: <input type="week" name="het"></label>
+        <br>
+        <label>Időpontfoglalás: <input type="time" name="ido"></label>
+        <br>
+        <br>
+
+        <label>Valami szám: <input type="number" name="szam" min="10" max="50" step="5" value="3"></label><br>
+        <label>Betöltés <input type="range" name="sav" value="25" min="0" max="50" step="5"></label><br>
+        <label>Feltöltés<input type="file" name="file"></label><br>
+        <label>Háttérszín<input type="color" name=""></label><br>
+
+        <p>
+            <label>Milyen nyelveken beszél?<br>
+                <select name="nyelv" id="" >
+                    <optgroup label="anyanyelv">
+                        <option value="magyar">magyar</option>
+                    <optgroup label="angolszászok">
+                        <option value="angol" >angol</option>
+                        <option value="nemet">német</option>
+                        <option value="holland">holland</option>
+                    <optgroup label="újlatin">
+                        <option value="francia">francia</option>
+                        <option value="spanyol">spanyol</option>
+                        <option value="olasz">olasz</option>
+                </select>
+            </label>
+        </p>
+
+        <p><label>Írja le a véleményét: <textarea name="velemeny" cols="40" rows="5" maxlength="150" placeholder="Max 150 karakter"></textarea></label></p>
+
+        <input type="reset" value="Visszaállítás">
+        <input type="submit" value="Elküldés"><br><br>
+
+        <button type="submit">Elküldés</button>
+        <button type="reset">Töröl</button>
+        <button type="button">Klikkelj rám!</button>
+    </form>
+</body>
+</html>

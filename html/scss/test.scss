@@ -1,0 +1,97 @@
+//változó használat
+$blue: #3bbfce;
+$margin: 16px;
+
+.content-navigation{
+    border-color: $blue;
+    color: darken($blue, 9%);
+}
+
+.bordered {
+    padding: $margin/2;
+    margin: $margin/2;
+    border-color: $blue;
+}
+
+//egymásba ágyazva megadás
+table.h1 {
+    margin: 2em 0;
+    td.ln {
+        text-align: rightS;
+    }
+}
+
+li{
+    font: {
+        family: serif;
+        weight: bold;
+        size:  1.2em;
+    };
+}
+
+//mixinek
+@mixin threedeetext ($color) {
+    color: $color;
+    text-shadow: 
+        0 2px 0 darken($color, 14%),
+        0 4px 0 darken($color, 16%),
+        0 6px 0 darken($color, 18%),
+        0 8px 0 darken($color, 20%),
+        3 8px 15 rgba(0, 0, 0, 0.1),
+        3 8px 5 rgba(0, 0, 0, 0.3);
+
+}
+
+h1 {
+    font-size: 120px;
+    @include threedeetext(#d4daa8)
+}
+
+h2{
+    font-size: 90px;
+    @include threedeetext(lighten(#d4daa8, 10%))
+}
+
+//ifek
+$textcolor: silver;
+
+p {
+    color: $textcolor;
+    @if lightness($textcolor) < 50 {
+        background-color: white;
+    } 
+    @else{
+        background-color: black;
+    }
+}
+
+//3 fajta ciklus
+@for $i from 1 through 4 {
+    .column-#{$i} {width: 10px * $i}
+}
+
+$list: jack john peter;
+
+.photos {
+    @each $author in $list {
+        .photo-#{$author} {
+            background-image: image_url("avatars/#{$author}.png");
+        }
+    }
+}
+
+$column: 4;
+
+@while $column > 0 {
+    .cols-#{$column} {
+        width: 10px * $column;
+    }
+    $column: $column - 1;
+}
+
+//import
+@import "compass";
+
+h1 {
+    @include box-shadow(7px 7px 5px gray)
+}

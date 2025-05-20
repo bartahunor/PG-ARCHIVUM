@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .flex-container {
+            display: flex;
+            background-color: blue;
+            height: 400px;
+            flex-direction: row; /*elhelyezkedése a diveknek sor/oszlop*/
+            flex-wrap:  wrap; /*divek pozicioja ha nem férnek el*/
+            /*flex-flow: row wrap; az előbbi kettő egyben */
+            justify-content: flex-start; /*hol helyezkedik el a divek*/
+            align-items: flex-start; /*flex-directionre meroleges tengely menti rendezés*/
+            align-content: space-around; /*egymáshoz képest hogy helyezkednek el*/
+        }
+
+        .flex-container div{
+            background-color: aquamarine;
+            width: 150px;
+            height: 50px;
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .el_1 {
+            flex-grow: 1; /*divek egymaáshoz képest a nagyságok aránya*/
+            order: 2; /*sorrendje az elemeknek*/
+        }
+
+        .el_2 {
+            flex-grow: 2;
+            order: 1;
+        }
+
+        .el_3 {
+            flex-grow: 3;
+            order: 3;
+        }
+    </style>
+    <title>Flexbox</title>
+</head>
+<body>
+    <div class="flex-container">
+        <div class="el_1">Elem 1</div>
+        <div class="el_2">Elem 2</div>
+        <div class="el_3">Elem 3</div>
+        <!-- <div>Elem 4</div>
+        <div>Elem 5</div>
+        <div>Elem 6</div>
+        <div>Elem 7</div>
+        <div>Elem 8</div>
+        <div>Elem 9</div>
+        <div>Elem 10</div>
+        <div>Elem 11</div>
+        <div>Elem 12</div>
+        <div>Elem 13</div>
+        <div>Elem 14</div>
+        <div>Elem 15</div> !-->
+    </div>
+</body>
+</html>

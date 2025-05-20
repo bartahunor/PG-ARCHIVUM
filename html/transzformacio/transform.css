@@ -1,0 +1,143 @@
+/*.box{
+    width: 300px;
+    height: 300px;
+    background-color: brown;
+    border: 1px solid red;
+    position: absolute;
+    color: bisque;
+    left: 10px;
+    top: 10px;
+    animation: beporog 2s;
+
+}
+
+@keyframes beporog {
+    from{
+        transform: scale(0) rotate(1440deg);
+    }
+}
+
+.box:hover{
+    transform: translate(80px, 80px); X Y irányba mozdul
+    transform: scale(1.5, 1.5); másfélszeresre növeli
+    transform: scale(-1, -1); X és Y menti tükrözés
+    transform: rotate(45deg); adott fokkal elfordul
+    transform: skew(20deg, 30deg); adott fokokkal elnyújtja
+
+    transform: translate(80px, 80px) scale(1.2, 1.2) rotate(45deg) skew(20deg, 30deg); több tulajdonság egyben megadva
+
+    transform: scale(-1);
+    transform-origin: 500px; tengelypontja a transzformációnak (akár az alakzaton kívül)
+
+}*/
+/*
+li{
+    display: inline; egymás mellé kerülnek
+    list-style: none; nincs lista formája
+    margin-right: 80px;
+}*/
+/*
+ul{
+    padding: 80px;
+}
+
+#egy:hover{
+    border: 2px solid blue;
+    border-radius: 5px;
+    box-shadow: 5px 5px gray;
+    transform: scale(1.5, 1.5) rotate(-15deg);
+}
+
+#ketto:hover{
+    border: 2px solid blue;
+    border-radius: 5px;
+    box-shadow: 5px 5px gray;
+    transform: scale(1.5, 1.5) rotate(0deg);
+}
+
+#harom:hover{
+    border: 2px solid blue;
+    border-radius: 5px;
+    box-shadow: 5px 5px gray;
+    transform: scale(1.5, 1.5) rotate(15deg);
+}
+*/
+
+
+
+/*
+div {
+    height: 200px;
+    width: 200px;
+}
+
+#befoglalo {
+    border: 2px solid red;
+    background-color: yellow;
+    margin: 50px;
+    perspective: 600px; 600pxről látjuk
+    perspective-origin: -150px -40px; perspektiva ide van eltolva
+}
+
+#transzformalt {
+    background-color: green;
+    transform: rotateY(45deg);
+    transform-style: preserve-3d;
+    /*color: white;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-align: center;
+    transform: translate3d(0, 0, 200px); Z tengely mentén közelebb van hozzám
+    transform: rotateY(120deg);
+    backface-visibility:hidden;
+    
+}
+
+#gyerek {
+    background-color: #f3c;
+    color: white;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-align: center;
+    transform: rotateX(45deg);
+}*/
+
+
+
+
+#befoglalo {
+    width: 450px;
+    height: 300px;
+    perspective: 1000px;
+}
+
+#kep {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d ;
+    transition: all 2s linear;
+}
+
+#szine, #fonakja {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 1px solid black;
+}
+
+#fonakja {
+    transform: rotateY(180deg);
+    padding: 10px;
+    color: white;
+    text-align: center;
+    background-color: gray;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#kep:hover {
+    transform: rotateY(180deg);
+}

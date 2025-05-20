@@ -1,0 +1,60 @@
+div{
+    margin-left: 150px;
+    background-color: #ff0;
+    background-clip: content-box;
+    border: 2px solid blue;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: right;
+    color: #00f;
+    font-size: 24px;
+    width: 650px;
+}
+
+caption{
+    padding: 30px 5px;
+    text-align: left;
+    color: #f00;
+    font-size: 28px;
+    font-family: "Comic Sans MS", cursive;
+    text-decoration: underline;
+    background-color: #3f3;
+    border: 4px dashed #f3c;
+    width: 632px;
+}
+
+span{
+    font-variant: small-caps; /*kis kapitális*/
+    font-weight: bolder;
+    color: #33cc;
+
+}
+
+#pole{
+    border: 2px solid red;
+}
+
+tfoot{
+    background-color: #ccc;
+    color: black;
+    text-align: left;
+}
+
+tbody tr:nth-child(odd){
+    background-color: orange; /*páratlan cellak narancssargak*/
+}
+
+th, td{
+    border: 1px solid black;
+    border-radius: 10px; /* cella lekerekítés*/
+    box-shadow: 3px 3px 3px black; 
+}
+
+table{
+    table-layout: fixed; /*ugyan akkora cellák*/
+    width: 650px;
+    caption-side: bottom;
+    border-collapse: separate; /*cellák elkülönülnek*/
+    border-spacing: 10px; /*cellák közti távolság separate esetén*/
+    empty-cells: hide; /*ures cella nem jelenik meg*/
+}
