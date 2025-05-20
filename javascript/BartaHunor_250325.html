@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let tomb = [100];
+        for (let i = 1; i < 100; i++)
+        {
+            
+            let szam2 = parseInt(((Math.random()) * 2 - 1) * 100)
+            tomb.push(szam2);
+        }
+
+        /*for (item of tomb)
+        {
+            console.log(item)
+        }*/
+        //1.
+        let osszeg = 0;
+        let parosdb = 0;
+        for (item of tomb)
+        {
+            if (item % 2 == 0)
+            {
+                osszeg += item;
+                parosdb++;
+            }
+        }
+        console.log("1. feladat. A páros számok átlaga " + (osszeg / parosdb))
+
+        //2.
+        let nagyobbak = 0;
+        for (let i = 1; i < tomb.length; i++)
+        {
+            if (tomb[i] > (tomb[i - 1] + tomb[i + 1]))
+            {
+                nagyobbak++;
+            }
+        }
+        console.log("2. feladat. " + nagyobbak + "db ilyen szám van")
+
+        //3.
+        let legparatlan = 0;
+        for (let i = 0; i < tomb.length; i++)
+        {
+            if (tomb[i] % 2 != 0 && tomb[i] > legparatlan)
+            {
+                legparatlan = tomb[i];
+            }
+        }
+        console.log("3. feladat. A legnagyobb páratlan szám a " + legparatlan);
+
+        //4
+        let van = false;
+        for (let i = 0; i < tomb.length; i++)
+        {
+            if (tomb[i] >= 0 && Math.sqrt(tomb[i]) % 1 === 0)
+            {
+                van = true;
+                break;
+            }
+        }
+        if (van == false)
+        { console.log("4. feladat. Nincs négyzetszám a tömben")}
+        else {
+            console.log("4. fealdat. Van négyzetszám a tömben")
+        }
+
+        //5
+        console.log("5. feladat. 7-tel osztható, de 3-mal nem osztható számok négyzete:")
+        for (let i = 0; i < tomb.length; i++)
+        {
+            if (tomb[i] % 7 == 0 && tomb[i] % 3 != 0)
+            {
+                console.log(tomb[i]**2)
+            }
+        }
+
+    </script>
+</body>
+</html>
