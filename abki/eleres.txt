@@ -1,0 +1,130 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS H:\> C:\'Program Files'\Ampps\mysql\bin\mysql.exe -h bh-db.ch2tvc8mpkdg.us-east-1.rds.amazonaws.com -u admin -p
+Enter password: ********
+ERROR 2003 (HY000): Can't connect to MySQL server on 'bh-db.ch2tvc8mpkdg.us-east-1.rds.amazonaws.com:3306' (10060)
+PS H:\> C:\'Program Files'\Ampps\mysql\bin\mysql.exe -h bh-db.ch2tvc8mpkdg.us-east-1.rds.amazonaws.com -u admin -p
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.4.5 Source distribution
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases
+    -> show databases,
+    -> show databases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'show databases,
+show databases' at line 2
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.17 sec)
+
+mysql> create database BH-db
+    -> create database BH_db;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-db
+create database BH_db' at line 1
+mysql> create database BH_db;
+Query OK, 1 row affected (0.14 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| BH_db              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.13 sec)
+
+
+
+
+
+
+
+
+
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS H:\> C:\'Program Files'\Ampps\mysql\bin\mysql.exe -h bh-katica.ch2tvc8mpkdg.us-east-1.rds.amazonaws.com -u admin -p
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 23
+Server version: 8.4.5 Source distribution
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database katica;
+Query OK, 1 row affected (0.16 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| katica             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.14 sec)
+
+mysql> SOURCE C:\Users\BartaHunor\Downloads\tablak.sql
+No connection. Trying to reconnect...
+Connection id:    26
+Current database: *** NONE ***
+
+Database changed
+Query OK, 0 rows affected, 1 warning (0.20 sec)
+
+Query OK, 0 rows affected, 3 warnings (0.16 sec)
+
+mysql> show tables;
++------------------+
+| Tables_in_katica |
++------------------+
+| forgalom         |
+| kategoria        |
++------------------+
+2 rows in set (0.13 sec)
+
+mysql> SOURCE C:\Users\BartaHunor\Downloads\adatok.sql
+Database changed
+Query OK, 2 rows affected (0.14 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+Query OK, 13 rows affected (0.13 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql>
+
+
